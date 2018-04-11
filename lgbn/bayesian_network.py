@@ -43,7 +43,14 @@ class BayesianNetwork:
             cpd.fit(observations=cpd_parents, targets=cpd_targets)
 
     def log_likelyhood(self, data):
-        pass
+        log_likelihood = 0
+        for cpd, parents_idx in zip(self.cpds, self.graph):
+            cpd_parents = data[:, self.graph[cpd.var_idx].astype(np.bool)]
+            cpd_targets = data[:, cpd.var_idx]
+
+            log_likelihood += cpd.log_likelihood(cpd_parents, cpd_targets)
+
+        return log_likelihood
 
     @property
     def is_fit(self):
@@ -60,12 +67,3 @@ class BayesianNetwork:
         s += '\n),\nis_fit:{},'.format(self.is_fit)
         s += '\nindependent_params:{},'.format(self.independent_params)
         return s
-
-
-n_variables = 64
-n_samples = 10000
-graph = np.tril(np.ones(shape=(n_variables, n_variables)), k=-1)
-data = np.random.rand(n_samples, n_variables)
-net = BayesianNetwork(graph)
-net.fit(data)
-print net

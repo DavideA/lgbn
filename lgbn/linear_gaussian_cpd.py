@@ -19,7 +19,9 @@ class LinearGaussian(CPD):
 
         # Linear Gaussian
         self.linear_model.fit(X=observations, y=targets)
-        self.std = np.sqrt(self.linear_model._residues / n_samples)
+
+        residual = np.square(self.linear_model.predict(observations) - targets)
+        self.std = np.sqrt(np.mean(residual))
 
     def log_likelihood(self, observations, targets):
         assert self.is_fit, 'Model is not fit. Did you call LinearGaussian.fit()?'
