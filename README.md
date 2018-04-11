@@ -1,2 +1,2 @@
 # lgbn
-Bayesian Network with Linear Gaussian CPDs
+### Bayesian Network with Linear Gaussian CPDs
